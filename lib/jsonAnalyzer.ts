@@ -28,6 +28,30 @@ export function analyzeJson(value: JsonValue): JsonAnalysis {
     valueTypes: {},
   };
 
+  let primaryArrayKey: string | undefined;
+  if (rootType === 'object') {
+    const obj = value as Record<string, JsonValue>;
+    const keys = Object.keys(obj);
+    
+    // Look for common array wrapper keys
+    const commonKeys = ['results', 'data', 'items', 'rows', 'list', 'payload'];
+    const arrayKeys = keys.filter(k => Array.isArray(obj[k]));
+    
+    primaryArrayKey = arrayKeys.find(k => commonKeys.includes(k.toLowerCase()));
+    
+    // If no common key, find the largest array
+    if (!primaryArrayKey && arrayKeys.length > 0) {
+      primaryArrayKey = arrayKeys.sort((a, b) => 
+        (obj[b] as any[]).length - (obj[a] as any[]).length
+      )[0];
+      
+      // Only consider it primary if it's substantial
+      if ((obj[primaryArrayKey] as any[]).length < 2) {
+        primaryArrayKey = undefined;
+      }
+    }
+  }
+
   let recommendedRenderer: RendererType = 'tree';
   let confidence = 0.75;
   const alternativeRenderers: RendererType[] = [];
@@ -42,7 +66,17 @@ export function analyzeJson(value: JsonValue): JsonAnalysis {
     };
   }
 
+  // Handle Primary Array Wrapping
+  if (primaryArrayKey) {
+    const arr = (value as Record<string, JsonValue>)[primaryArrayKey] as JsonValue[];
+    const arrAnalysis = analyzeJson(arr);
+    recommendedRenderer = arrAnalysis.recommendedRenderer;
+    confidence = arrAnalysis.confidence * 0.9; // Slightly lower confidence because of wrapping
+    alternativeRenderers.push(...arrAnalysis.alternativeRenderers, 'tree');
+  }
+
   if (rootType === 'array' && arrayLength && arrayLength > 1) {
+    // ... existing logic ...
     const arr = value as JsonValue[];
     const allObjects = arr.every(v => typeof v === 'object' && !Array.isArray(v) && v !== null);
     if (allObjects && isUniform && arr.every(v => getDepth(v) <= 2)) {
@@ -52,12 +86,14 @@ export function analyzeJson(value: JsonValue): JsonAnalysis {
     }
   }
 
+  // ... rest of the original logic (I'll keep it as fallback)
   if (recommendedRenderer === 'tree' && rootType === 'object' && depth <= 2) {
     recommendedRenderer = 'keyvalue';
     confidence = 0.90;
     alternativeRenderers.push('tree');
   }
 
+  // ... (keeping other array/object logic)
   if (recommendedRenderer === 'tree' && rootType === 'array') {
     const arr = value as JsonValue[];
     const isChart = isNumericArray(arr) || (
@@ -96,6 +132,7 @@ export function analyzeJson(value: JsonValue): JsonAnalysis {
     recommendedRenderer,
     confidence,
     stats,
-    alternativeRenderers: [...new Set(alternativeRenderers)].filter(r => r !== recommendedRenderer).slice(0, 2),
+    alternativeRenderers: [...new Set(alternativeRenderers)].filter(r => r !== recommendedRenderer).slice(0, 3),
+    primaryArrayKey,
   };
 }

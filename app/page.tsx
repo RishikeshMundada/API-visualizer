@@ -5,6 +5,7 @@ import { JsonValue, JsonAnalysis, RendererType } from '@/lib/types';
 import { analyzeJson } from '@/lib/jsonAnalyzer';
 import JsonInput from '@/components/JsonInput';
 import VisualizerEngine from '@/components/VisualizerEngine';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 const examples = [
   `[
@@ -19,6 +20,37 @@ const examples = [
     "stargazers_count": 42300, "forks_count": 2890, "open_issues_count": 124,
     "language": "TypeScript", "license": "MIT", "default_branch": "main",
     "created_at": "2019-07-14T10:22:00Z", "updated_at": "2024-03-15T08:30:00Z"
+  }`,
+  `{
+    "meta": {
+        "status": "success",
+        "pagination": {
+            "current_page": 1,
+            "total_pages": 12,
+            "page_size": 10,
+            "total_count": 112
+        }
+    },
+    "results": [
+        {
+            "id": "23428455-c7d4-4c4a-ad24-376223748537",
+            "title": "Modern API Architecture",
+            "author": "Aman Jain",
+            "category": "Technology",
+            "tags": ["api", "rest", "design"],
+            "published_at": "2026-04-02T15:16:04Z",
+            "is_featured": true
+        },
+        {
+            "id": "3cc2377a-f768-4f31-87ef-0fa59c4286eb",
+            "title": "Scalable Frontend Systems",
+            "author": "Sarah Chen",
+            "category": "Frontend",
+            "tags": ["react", "nextjs", "performance"],
+            "published_at": "2026-04-01T09:27:05Z",
+            "is_featured": false
+        }
+    ]
   }`,
   `[
     {"month": "Jan", "revenue": 48000}, {"month": "Feb", "revenue": 52000},
@@ -152,8 +184,9 @@ export default function Home() {
           API Visualizer
         </div>
         <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Paste JSON. See UI instantly.</div>
-        <div className="flex gap-2 items-center">
-          <a href="https://github.com" aria-label="GitHub" style={{ color: 'var(--text-secondary)' }} className="hover:text-[var(--text-primary)] transition-colors">
+        <div className="flex gap-3 items-center">
+          <ThemeSwitcher />
+          <a href="https://github.com/RishikeshMundada/API-visualizer" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-secondary)' }} className="hover:text-[var(--text-primary)] transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
             </svg>

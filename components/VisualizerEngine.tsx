@@ -104,7 +104,7 @@ export default function VisualizerEngine({ data, analysis, activeRenderer, onRen
 
   return (
     <div className="h-full flex flex-col bg-[var(--bg-primary)]">
-      <div className="border-b border-[var(--border)] bg-[var(--bg-secondary)] px-6 py-3 flex items-center gap-6 flex-wrap">
+      <div className="border-b border-[var(--border)] bg-[var(--bg-secondary)] px-4 md:px-6 py-3 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         <div className="flex items-center gap-3">
           <TypeBadge type={getValueType(data)} />
           <h1 className="text-sm font-bold tracking-tight text-[var(--text-primary)]">
@@ -129,7 +129,7 @@ export default function VisualizerEngine({ data, analysis, activeRenderer, onRen
 
       <StatsBar stats={analysis.stats} />
 
-      <div className="bg-[var(--bg-secondary)] px-6 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <div className="bg-[var(--bg-secondary)] px-4 md:px-6 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
         {allRenderers.map(renderer => {
           const Icon = rendererConfig[renderer].icon;
           const isActive = activeRenderer === renderer;
@@ -150,7 +150,7 @@ export default function VisualizerEngine({ data, analysis, activeRenderer, onRen
         })}
       </div>
 
-      <div className="flex-1 overflow-auto p-6 animate-in fade-in zoom-in-95 duration-300">
+      <div className="flex-1 overflow-auto p-4 md:p-6 animate-in fade-in zoom-in-95 duration-300">
         <div className="max-w-[1600px] mx-auto">
           {renderActive()}
         </div>

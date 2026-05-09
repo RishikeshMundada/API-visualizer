@@ -35,7 +35,7 @@ const examples = [
         {
             "id": "23428455-c7d4-4c4a-ad24-376223748537",
             "title": "Modern API Architecture",
-            "author": "Aman Jain",
+            "author": "Rahul Verma",
             "category": "Technology",
             "tags": ["api", "rest", "design"],
             "published_at": "2026-04-02T15:16:04Z",
@@ -137,7 +137,7 @@ export default function Home() {
       setAnalysis(result);
       setActiveRenderer(result.recommendedRenderer);
       setParseError(null);
-    } catch {}
+    } catch { }
     setExampleIndex((prev) => (prev + 1) % examples.length);
   };
 
@@ -180,10 +180,10 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col bg-[var(--bg-primary)]">
       <header className="h-12 border-b flex items-center justify-between px-4" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-secondary)' }}>
-        <div className="text-lg" style={{ fontFamily: "'Tiempos Text', Georgia, serif", color: 'var(--text-primary)' }}>
+        <div className="text-lg font-bold" style={{ fontFamily: "'Tiempos Text', Georgia, serif", color: 'var(--text-primary)' }}>
           API Visualizer
         </div>
-        <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Paste JSON. See UI instantly.</div>
+        <div className="text-xs hidden sm:block" style={{ color: 'var(--text-muted)' }}>Paste JSON. See UI instantly.</div>
         <div className="flex gap-3 items-center">
           <ThemeSwitcher />
           <a href="https://github.com/RishikeshMundada/API-visualizer" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-secondary)' }} className="hover:text-[var(--text-primary)] transition-colors">
@@ -194,8 +194,13 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
-        <div className="overflow-y-auto" style={{ width: `${splitRatio}%` }}>
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+        <div className="w-full md:h-full overflow-y-auto border-b md:border-b-0 md:border-r border-[var(--border)]" style={{ width: 'var(--sidebar-width, 100%)' }}>
+          <style jsx>{`
+            @media (min-width: 768px) {
+              div { --sidebar-width: ${splitRatio}%; }
+            }
+          `}</style>
           <JsonInput
             rawInput={rawInput}
             onInputChange={handleInputChange}
@@ -206,7 +211,7 @@ export default function Home() {
           />
         </div>
         <div
-          className="w-1 cursor-col-resize hover:bg-[var(--accent-primary)] transition-colors"
+          className="hidden md:block w-1 cursor-col-resize hover:bg-[var(--accent-primary)] transition-colors"
           onMouseDown={handleResizeStart}
         ></div>
         <div className="overflow-y-auto flex-1">

@@ -24,6 +24,7 @@ export interface JsonAnalysis {
   confidence: number;
   stats: JsonStats;
   alternativeRenderers: RendererType[];
+  primaryArrayKey?: string;
 }
 
 export interface RendererProps {

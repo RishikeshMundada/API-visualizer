@@ -8,7 +8,8 @@ import KeyValueRenderer from './renderers/KeyValueRenderer';
 import TreeRenderer from './renderers/TreeRenderer';
 import ChartRenderer from './renderers/ChartRenderer';
 import PrimitiveRenderer from './renderers/PrimitiveRenderer';
-import { LayoutGrid, Table, ListTree, BarChart3, Type, Braces, Wand2 } from 'lucide-react';
+import { LayoutGrid, Table, ListTree, BarChart3, Type, Braces, Wand2, List } from 'lucide-react';
+import { analyzeJson } from '@/lib/jsonAnalyzer';
 
 const rendererConfig: Record<RendererType, { label: string; icon: any }> = {
   table: { label: 'Table View', icon: Table },
@@ -34,22 +35,70 @@ export default function VisualizerEngine({ data, analysis, activeRenderer, onRen
   const allRenderers: RendererType[] = Array.from(new Set([analysis.recommendedRenderer, ...analysis.alternativeRenderers]));
 
   const renderActive = () => {
-    switch (activeRenderer) {
-      case 'table':
-        return <TableRenderer data={data} analysis={analysis} />;
-      case 'cards':
-        return <CardRenderer data={data} analysis={analysis} />;
-      case 'keyvalue':
-        return <KeyValueRenderer data={data} analysis={analysis} />;
-      case 'tree':
-        return <TreeRenderer data={data} analysis={analysis} />;
-      case 'chart':
-        return <ChartRenderer data={data} analysis={analysis} />;
-      case 'primitive':
-        return <PrimitiveRenderer data={data} analysis={analysis} />;
-      default:
-        return null;
+    let displayData = data;
+    let metadata: JsonValue | null = null;
+
+    // If we have a primary array and are using a list-based renderer,
+    // we split the view into Metadata + Main Data
+    let subAnalysis = analysis;
+    if (analysis.primaryArrayKey && (activeRenderer === 'table' || activeRenderer === 'cards')) {
+      const obj = data as Record<string, JsonValue>;
+      displayData = obj[analysis.primaryArrayKey];
+      
+      // We need accurate analysis for the sub-data (the array)
+      subAnalysis = analyzeJson(displayData);
+      
+      // Create metadata object (everything except the primary array)
+      const metaObj: Record<string, JsonValue> = {};
+      Object.keys(obj).forEach(k => {
+        if (k !== analysis.primaryArrayKey) metaObj[k] = obj[k];
+      });
+      if (Object.keys(metaObj).length > 0) metadata = metaObj;
     }
+
+    const content = (() => {
+      switch (activeRenderer) {
+        case 'table':
+          return <TableRenderer data={displayData} analysis={subAnalysis} />;
+        case 'cards':
+          return <CardRenderer data={displayData} analysis={subAnalysis} />;
+        case 'keyvalue':
+          return <KeyValueRenderer data={data} analysis={analysis} />;
+        case 'tree':
+          return <TreeRenderer data={data} analysis={analysis} />;
+        case 'chart':
+          return <ChartRenderer data={displayData} analysis={subAnalysis} />;
+        case 'primitive':
+          return <PrimitiveRenderer data={data} analysis={analysis} />;
+        default:
+          return null;
+      }
+    })();
+
+    if (metadata && (activeRenderer === 'table' || activeRenderer === 'cards')) {
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <Braces size={12} className="text-[var(--text-muted)]" />
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)]">Envelope Metadata</span>
+            </div>
+            <KeyValueRenderer data={metadata} analysis={analysis} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 px-1">
+              <List size={12} className="text-[var(--text-muted)]" />
+              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)]">
+                Main Content: {analysis.primaryArrayKey}
+              </span>
+            </div>
+            {content}
+          </div>
+        </div>
+      );
+    }
+
+    return content;
   };
 
   return (

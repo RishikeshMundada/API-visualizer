@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { JsonValue } from '@/lib/types';
+import { JsonValue, JsonAnalysis } from '@/lib/types';
 import TypeBadge from '@/components/TypeBadge';
 import { getValueType } from '@/lib/jsonUtils';
 import { ChevronRight, ChevronDown, Braces, List } from 'lucide-react';
@@ -103,7 +103,7 @@ function TreeNode({ keyName, value, depth = 0, isLast = false }: { keyName?: str
   );
 }
 
-export default function TreeRenderer({ data }: { data: JsonValue; analysis: any }) {
+export default function TreeRenderer({ data }: { data: JsonValue; analysis: JsonAnalysis }) {
   return (
     <div className="p-4 bg-[var(--bg-card)] rounded-xl border border-[var(--border)] shadow-sm">
       <div className="mb-4 flex items-center gap-2 px-2">

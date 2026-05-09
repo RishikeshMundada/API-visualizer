@@ -1,8 +1,8 @@
-import { JsonValue } from '@/lib/types';
+import { JsonValue, JsonAnalysis } from '@/lib/types';
 import TypeBadge from '@/components/TypeBadge';
 import { getValueType } from '@/lib/jsonUtils';
 
-export default function PrimitiveRenderer({ data }: { data: JsonValue; analysis: any }) {
+export default function PrimitiveRenderer({ data }: { data: JsonValue; analysis: JsonAnalysis }) {
   const type = getValueType(data);
 
   return (

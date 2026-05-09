@@ -3,7 +3,7 @@ import { Layers, Box, Database, Sparkles } from 'lucide-react';
 
 export default function StatsBar({ stats }: { stats: JsonStats }) {
   return (
-    <div className="flex items-center gap-6 px-6 py-2.5 border-b border-[var(--border)] bg-[var(--bg-card)]">
+    <div className="flex items-center gap-3 sm:gap-6 px-4 md:px-6 py-2.5 border-b border-[var(--border)] bg-[var(--bg-card)] flex-wrap overflow-x-auto no-scrollbar">
       <div className="flex items-center gap-2 group">
         <Layers size={14} className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors" />
         <div className="flex flex-col">
@@ -12,7 +12,7 @@ export default function StatsBar({ stats }: { stats: JsonStats }) {
         </div>
       </div>
 
-      <div className="h-6 w-px bg-[var(--border)]"></div>
+      <div className="h-6 w-px bg-[var(--border)] hidden sm:block"></div>
 
       <div className="flex items-center gap-2 group">
         <Box size={14} className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors" />
@@ -24,7 +24,7 @@ export default function StatsBar({ stats }: { stats: JsonStats }) {
 
       {stats.arrayLength !== undefined && (
         <>
-          <div className="h-6 w-px bg-[var(--border)]"></div>
+          <div className="h-6 w-px bg-[var(--border)] hidden sm:block"></div>
           <div className="flex items-center gap-2 group">
             <Database size={14} className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors" />
             <div className="flex flex-col">
@@ -35,7 +35,7 @@ export default function StatsBar({ stats }: { stats: JsonStats }) {
         </>
       )}
 
-      <div className="h-6 w-px bg-[var(--border)]"></div>
+      <div className="h-6 w-px bg-[var(--border)] hidden sm:block"></div>
 
       <div className="flex items-center gap-2 group">
         <Sparkles size={14} className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors" />

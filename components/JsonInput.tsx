@@ -12,16 +12,16 @@ export default function JsonInput({ rawInput, onInputChange, parseError, onForma
   const charCount = rawInput.length;
 
   return (
-    <div className="h-full flex flex-col p-6 gap-4 bg-[var(--bg-primary)]">
-      <div className="flex items-center justify-between">
+    <div className="h-full flex flex-col p-4 md:p-6 gap-4 bg-[var(--bg-primary)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse" />
           <h2 className="text-xs font-bold font-mono text-[var(--text-secondary)] uppercase tracking-[0.2em]">Input</h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={onLoadExample}
-            className="group flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--accent-primary)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--accent-primary)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
           >
             <Play size={12} className="group-hover:text-[var(--accent-primary)] transition-colors" />
             Example
@@ -29,14 +29,14 @@ export default function JsonInput({ rawInput, onInputChange, parseError, onForma
           <button
             onClick={onFormat}
             disabled={!rawInput}
-            className="group flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--accent-primary)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200 disabled:opacity-30"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--accent-primary)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200 disabled:opacity-30"
           >
             <AlignLeft size={12} className="group-hover:text-[var(--accent-primary)] transition-colors" />
             Format
           </button>
           <button
             onClick={onClear}
-            className="group flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--error)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--error)] transition-all duration-200"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border border-[var(--border)] rounded-lg hover:border-[var(--error)] hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--error)] transition-all duration-200"
           >
             <Trash2 size={12} className="group-hover:scale-110 transition-transform" />
             Clear

@@ -21,6 +21,37 @@ const examples = [
     "language": "TypeScript", "license": "MIT", "default_branch": "main",
     "created_at": "2019-07-14T10:22:00Z", "updated_at": "2024-03-15T08:30:00Z"
   }`,
+  `{
+    "meta": {
+        "status": "success",
+        "pagination": {
+            "current_page": 1,
+            "total_pages": 12,
+            "page_size": 10,
+            "total_count": 112
+        }
+    },
+    "results": [
+        {
+            "id": "23428455-c7d4-4c4a-ad24-376223748537",
+            "title": "Modern API Architecture",
+            "author": "Aman Jain",
+            "category": "Technology",
+            "tags": ["api", "rest", "design"],
+            "published_at": "2026-04-02T15:16:04Z",
+            "is_featured": true
+        },
+        {
+            "id": "3cc2377a-f768-4f31-87ef-0fa59c4286eb",
+            "title": "Scalable Frontend Systems",
+            "author": "Sarah Chen",
+            "category": "Frontend",
+            "tags": ["react", "nextjs", "performance"],
+            "published_at": "2026-04-01T09:27:05Z",
+            "is_featured": false
+        }
+    ]
+  }`,
   `[
     {"month": "Jan", "revenue": 48000}, {"month": "Feb", "revenue": 52000},
     {"month": "Mar", "revenue": 61000}, {"month": "Apr", "revenue": 55000},

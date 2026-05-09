@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { JsonValue } from '@/lib/types';
+import { JsonValue, JsonAnalysis, JsonObject, JsonArray } from '@/lib/types';
 import TypeBadge from '@/components/TypeBadge';
 import { getValueType } from '@/lib/jsonUtils';
 import { User, Mail, Calendar, Hash, Globe, Info, Clock, CheckCircle2, XCircle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 
-export default function CardRenderer({ data }: { data: JsonValue; analysis: any }) {
+export default function CardRenderer({ data }: { data: JsonValue; analysis: JsonAnalysis }) {
   const [expandedStrings, setExpandedStrings] = useState<Record<number, Set<string>>>({});
 
   const toggleExpand = (cardIdx: number, key: string) => {
@@ -104,9 +104,11 @@ export default function CardRenderer({ data }: { data: JsonValue; analysis: any 
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-2">
-      {(data as any[]).map((item, idx) => {
-        const { primaryKey, secondaryKey } = identifyHeaderFields(item);
-        const metadataFields = Object.entries(item).filter(([k]) => k !== primaryKey && k !== secondaryKey);
+      {(data as JsonArray)
+        .filter((item): item is JsonObject => item !== null && typeof item === 'object' && !Array.isArray(item))
+        .map((obj, idx) => {
+          const { primaryKey, secondaryKey } = identifyHeaderFields(obj);
+          const metadataFields = Object.entries(obj).filter(([k]) => k !== primaryKey && k !== secondaryKey);
 
         return (
           <div
@@ -125,13 +127,13 @@ export default function CardRenderer({ data }: { data: JsonValue; analysis: any 
                 <div className="flex-1 min-w-0">
                   {primaryKey && (
                     <h3 className="text-lg font-semibold truncate leading-tight mb-0.5" style={{ color: 'var(--text-primary)' }}>
-                      {String(item[primaryKey])}
+                      {String(obj[primaryKey])}
                     </h3>
                   )}
                   {secondaryKey && (
                     <div className="flex items-center gap-1 text-[10px] font-mono tracking-tighter opacity-50" style={{ color: 'var(--text-secondary)' }}>
                       <Hash size={10} />
-                      {String(item[secondaryKey])}
+                      {String(obj[secondaryKey])}
                     </div>
                   )}
                 </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { JsonValue } from '@/lib/types';
+import { JsonValue, JsonAnalysis, JsonArray, JsonObject } from '@/lib/types';
 import {
   BarChart,
   Bar,
@@ -22,16 +22,17 @@ const COLORS = ['#D4A574', '#C8956A', '#8B7355', '#60A5FA', '#4ADE80'];
 
 type ChartType = 'bar' | 'line' | 'pie';
 
-export default function ChartRenderer({ data }: { data: JsonValue; analysis: any }) {
+export default function ChartRenderer({ data }: { data: JsonValue; analysis: JsonAnalysis }) {
   const [chartType, setChartType] = useState<ChartType>('bar');
-  const arr = data as any[];
-
-  const isNumericArray = arr.length > 0 && arr.every((v: any) => typeof v === 'number');
-  const isLabelValue = !isNumericArray && arr.length > 0 && arr.every((v: any) => {
-    const keys = Object.keys(v);
-    return keys.length === 2 &&
-      keys.some((k: string) => typeof v[k] === 'string') &&
-      keys.some((k: string) => typeof v[k] === 'number');
+  const arr = data as JsonArray;
+  const isNumericArray = arr.length > 0 && arr.every((v) => typeof v === 'number');
+  const isLabelValue = !isNumericArray && arr.length > 0 && arr.every((v) => {
+    if (v === null || typeof v !== 'object' || Array.isArray(v)) return false;
+    const obj = v as JsonObject;
+    const keys = Object.keys(obj);
+    return keys.length >= 2 &&
+      keys.some((k) => typeof obj[k] === 'string') &&
+      keys.some((k) => typeof obj[k] === 'number');
   });
 
   let chartData: Array<Record<string, any>> = [];
@@ -39,15 +40,15 @@ export default function ChartRenderer({ data }: { data: JsonValue; analysis: any
   let nameKey = '';
 
   if (isNumericArray) {
-    chartData = arr.map((v, idx) => ({ index: idx, value: v }));
+    chartData = (arr as number[]).map((v, idx) => ({ index: idx, value: v }));
     dataKey = 'value';
     nameKey = 'index';
   } else if (isLabelValue) {
-    const firstItem = arr[0];
+    const firstItem = arr[0] as JsonObject;
     const keys = Object.keys(firstItem);
-    nameKey = keys.find((k: string) => typeof firstItem[k] === 'string') || keys[0];
-    dataKey = keys.find((k: string) => typeof firstItem[k] === 'number') || keys[1];
-    chartData = arr.map((item: any) => ({
+    nameKey = keys.find((k) => typeof firstItem[k] === 'string') || keys[0];
+    dataKey = keys.find((k) => typeof firstItem[k] === 'number') || keys[1];
+    chartData = (arr as JsonObject[]).map((item) => ({
       [nameKey]: item[nameKey],
       [dataKey]: item[dataKey],
     }));

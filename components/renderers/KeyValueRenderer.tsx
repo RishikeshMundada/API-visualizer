@@ -1,4 +1,4 @@
-import { JsonValue } from '@/lib/types';
+import { JsonValue, JsonAnalysis } from '@/lib/types';
 import TypeBadge from '@/components/TypeBadge';
 import { getValueType } from '@/lib/jsonUtils';
 
@@ -47,7 +47,7 @@ function KeyValueRow({ keyName, value, depth = 0 }: { keyName: string; value: Js
   );
 }
 
-export default function KeyValueRenderer({ data }: { data: JsonValue; analysis: any }) {
+export default function KeyValueRenderer({ data }: { data: JsonValue; analysis: JsonAnalysis }) {
   const obj = data as Record<string, JsonValue>;
   return (
     <div className="flex flex-col space-y-0.5 bg-[var(--bg-card)] rounded-lg p-1.5 border border-[var(--border)] shadow-sm">

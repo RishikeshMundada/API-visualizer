@@ -10,6 +10,7 @@ import ChartRenderer from './renderers/ChartRenderer';
 import PrimitiveRenderer from './renderers/PrimitiveRenderer';
 import { LayoutGrid, Table, ListTree, BarChart3, Type, Braces, Wand2, List } from 'lucide-react';
 import { analyzeJson } from '@/lib/jsonAnalyzer';
+import { getValueType } from '@/lib/jsonUtils';
 
 const rendererConfig: Record<RendererType, { label: string; icon: any }> = {
   table: { label: 'Table View', icon: Table },
@@ -105,7 +106,7 @@ export default function VisualizerEngine({ data, analysis, activeRenderer, onRen
     <div className="h-full flex flex-col bg-[var(--bg-primary)]">
       <div className="border-b border-[var(--border)] bg-[var(--bg-secondary)] px-6 py-3 flex items-center gap-6 flex-wrap">
         <div className="flex items-center gap-3">
-          <TypeBadge type={analysis.rootType === 'primitive' ? typeof data as any : analysis.rootType} />
+          <TypeBadge type={getValueType(data)} />
           <h1 className="text-sm font-bold tracking-tight text-[var(--text-primary)]">
             {rootTypeLabels[analysis.rootType]}
           </h1>
